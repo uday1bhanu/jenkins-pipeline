@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  app:
+    build: ./webapp
+    image: uday1bhanu/docker-jenkins-app
+
+  app2:
+    image: uday1bhanu/docker-jenkins-pipeline:${BUILD_NUMBER}
+
+  unit:
+    image: maven
+    volumes:
+      - .:/usr/src/myapp
+      - /tmp/go:/go
+    command: bash -c "mvn test"
+

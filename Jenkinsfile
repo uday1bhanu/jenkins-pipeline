@@ -38,7 +38,10 @@ node {
     try {
       dir('webapp') {
         sh "mvn test"
-        docker.build("uday1bhanu/docker-jenkins-pipeline:${env.BUILD_NUMBER}").push()
+        def appImg = docker.build("uday1bhanu/docker-jenkins-pipeline:${env.BUILD_NUMBER}")
+	docker.withRegistry('https://hub.docker.com', 'uday-docker-hub'){
+		appImg.push();
+	}
       }
     } catch (error) {
 

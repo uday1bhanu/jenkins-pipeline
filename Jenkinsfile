@@ -11,7 +11,7 @@ node {
 
   stage('Create Docker Image') {
     dir('webapp') {
-      docker.build("uday1bhanu/docker-jenkins-pipeline:${env.BUILD_NUMBER}")
+      def appImg = docker.build("uday1bhanu/docker-jenkins-pipeline:${env.BUILD_NUMBER}")
     }
   }
 
@@ -35,9 +35,6 @@ node {
     try {
       dir('webapp') {
         sh "mvn test"
-        def appImg = docker.build("uday1bhanu/docker-jenkins-pipeline:${env.BUILD_NUMBER}")
-	docker.withRegistry('https://registry.hub.docker.com', 'uday-docker-hub'){
-		appImg.push();
 	}
       }
     } catch (error) {
@@ -46,4 +43,19 @@ node {
       junit '**/target/surefire-reports/*.xml'
     }
   }
+
+ stage('Push to registry') {
+  try {
+      dir('webapp') {
+        //def appImg = docker.build("uday1bhanu/docker-jenkins-pipeline:${env.BUILD_NUMBER}")
+        docker.withRegistry('https://registry.hub.docker.com', 'uday-docker-hub'){
+                appImg.push();
+        }
+      }
+    } catch (error) {
+
+    } finally {
+    }
+
+ }
 }

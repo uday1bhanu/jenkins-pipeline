@@ -19,7 +19,7 @@ node {
     try {
       // Run application using Docker image
       //sh "DB=`docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`"
-      sh "docker run -e uday1bhanu/docker-jenkins-pipeline:${env.BUILD_NUMBER}"
+      sh "docker run uday1bhanu/docker-jenkins-pipeline:${env.BUILD_NUMBER}"
 
       // Run tests using Maven
       //dir ('webapp') {
@@ -36,7 +36,7 @@ node {
       dir('webapp') {
         sh "mvn test"
         def appImg = docker.build("uday1bhanu/docker-jenkins-pipeline:${env.BUILD_NUMBER}")
-	docker.withRegistry('https://hub.docker.com', 'uday-docker-hub'){
+	docker.withRegistry('https://registry.hub.docker.com', 'uday-docker-hub'){
 		appImg.push();
 	}
       }

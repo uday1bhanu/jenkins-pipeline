@@ -36,7 +36,6 @@ node {
       dir('webapp') {
         sh "mvn test"
 	}
-      }
     } catch (error) {
 
     } finally {
